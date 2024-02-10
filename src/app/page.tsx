@@ -19,10 +19,10 @@ export default async function Home() {
         </h1>
         <div className="flex flex-col items-center">
           <Link href="/friends" className="text-2xl font-bold">
-            友達一覧
+            ともだち
           </Link>
           <Link href="/events" className="text-2xl font-bold">
-            イベント一覧
+            できごと
           </Link>
         </div>
       </div>

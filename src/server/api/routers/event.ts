@@ -7,6 +7,13 @@ export const eventRouter = createTRPCRouter({
   list: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.events.findMany({
       where: (friend, { eq }) => eq(friend.createdUserId, ctx.session.user.id),
+      with: {
+        participants: {
+          with: {
+            friend: true,
+          },
+        },
+      },
     });
   }),
 

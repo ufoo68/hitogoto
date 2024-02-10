@@ -15,10 +15,12 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[3rem]">
-          イベント一覧
-        </h1>
-        <CreateEvent />
+        <div className="flex gap-2">
+          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[3rem]">
+            できごと
+          </h1>
+          <CreateEvent />
+        </div>
         <EventList />
       </div>
     </main>
@@ -47,6 +49,37 @@ async function EventList() {
                 })}
               </th>
               <td className="text-2xl font-extrabold">{event.name}</td>
+              <td>
+                {event.participants.map((participant) => (
+                  <div
+                    className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white shadow p-1"
+                    key={participant.id}
+                  >
+                    {participant?.friend?.thmbnailUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src={participant?.friend?.thmbnailUrl}
+                        alt="Rounded avatar"
+                      />
+                    ) : (
+                      <svg
+                        className="h-8 w-8 text-gray-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                    )}
+                    <div>{participant?.friend?.name}</div>
+                  </div>
+                ))}
+              </td>
             </tr>
           ))}
         </tbody>
