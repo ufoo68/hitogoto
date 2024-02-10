@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
+  json,
   pgTableCreator,
   primaryKey,
   serial,
@@ -24,7 +25,7 @@ export const posts = createTable(
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }),
-    createdById: varchar("createdById", { length: 255 })
+    createdUserId: varchar("createdUserId", { length: 255 })
       .notNull()
       .references(() => users.id),
     createdAt: timestamp("created_at")
@@ -33,9 +34,9 @@ export const posts = createTable(
     updatedAt: timestamp("updatedAt"),
   },
   (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
+    createdUserIdIdx: index("createdUserId_idx").on(example.createdUserId),
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
 
 export const users = createTable("user", {
@@ -76,7 +77,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -96,7 +97,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -112,5 +113,142 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
+
+export const friends = createTable(
+  "friend",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    name: varchar("name", { length: 256 }).notNull(),
+    thmbnailUrl: text("thmbnailUrl").default(sql`NULL`),
+    createdUserId: varchar("createdUserId", { length: 255 }),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt"),
+  },
+);
+
+export const friendRelations = relations(friends, ({ one, many }) => ({
+  createdUser: one(users, { fields: [friends.createdUserId], references: [users.id] }),
+  profiles: many(friendProfiles),
+  tags: many(friendTags),
+}));
+
+export const tags = createTable(
+  "tags",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    name: varchar("name", { length: 256 }).notNull(),
+    createdUserId: varchar("createdUserId", { length: 255 }),
+    color: varchar("color", { length: 256 }).default(sql`'#93b69c'`),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt"),
+  },
+);
+
+export const tagsRelations = relations(tags, ({ one, many }) => ({
+  createdUser: one(users, { fields: [tags.createdUserId], references: [users.id] }),
+  friends: many(friendTags),
+}));
+
+export const friendTags = createTable(
+  "friend_tags",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    friendId: varchar("friend_id", { length: 255 }),
+    tagId: varchar("tag_id", { length: 255 }),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt"),
+  },
+);
+
+export const userTagsRelations = relations(friendTags, ({ one }) => ({
+  friend: one(friends, { fields: [friendTags.friendId], references: [friends.id] }),
+  tag: one(tags, { fields: [friendTags.tagId], references: [tags.id] }),
+}));
+
+export const friendProfiles = createTable(
+  "friend_profile",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    label: varchar("label", { length: 256 }).notNull(),
+    value: json("value").notNull(),
+    friendId: varchar("friend_id", { length: 255 }),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt"),
+  },
+);
+
+export const friendProfilesRelations = relations(friendProfiles, ({ one }) => ({
+  friend: one(friends, { fields: [friendProfiles.friendId], references: [friends.id] }),
+}));
+
+export const friendProfileTemplates = createTable(
+  "friend_profile_template",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    content: json("content").notNull(),
+    createdUserId: varchar("createdUserId", { length: 255 }),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt"),
+  },
+);
+
+export const events = createTable(
+  "event",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    name: varchar("name", { length: 256 }).notNull(),
+    description: text("description").default(sql`NULL`),
+    date: timestamp("date").notNull(),
+    location: varchar("location", { length: 256 }).default(sql`NULL`),
+    createdUserId: varchar("createdUserId", { length: 255 }),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt"),
+  },
+);
+
+export const eventRelations = relations(events, ({ one, many }) => ({
+  createdUser: one(users, { fields: [events.createdUserId], references: [users.id] }),
+  participants: many(eventParticipants),
+  media: many(eventMedia),
+}));
+
+export const eventParticipants = createTable('event_participant', {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  eventId: varchar('event_id', { length: 255 }),
+  friendId: varchar('friend_id', { length: 255 }),
+  createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: timestamp('updatedAt'),
+});
+
+export const eventParticipantsRelations = relations(eventParticipants, ({ one }) => ({
+  friend: one(friends, { fields: [eventParticipants.friendId], references: [friends.id] }),
+  event: one(events, { fields: [eventParticipants.eventId], references: [events.id] }),
+}));
+
+export const eventMedia = createTable('event_media', {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  eventId: varchar('event_id', { length: 255 }),
+  content: json('content').notNull(),
+  createdUserId: varchar('createdUserId', { length: 255 }),
+  createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: timestamp('updatedAt'),
+});
+
+export const eventMediaRelations = relations(eventMedia, ({ one }) => ({
+  createdUser: one(users, { fields: [eventMedia.createdUserId], references: [users.id] }),
+  event: one(events, { fields: [eventMedia.eventId], references: [events.id] }),
+}));
