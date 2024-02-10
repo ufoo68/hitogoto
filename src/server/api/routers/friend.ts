@@ -14,10 +14,11 @@ export const friendRouter = createTRPCRouter({
   }),
 
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(z.object({ name: z.string().min(1), thmbnailUrl: z.string().optional() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(friends).values({
         name: input.name,
+        thmbnailUrl: input.thmbnailUrl,
         createdUserId: ctx.session.user.id,
       });
     }),
