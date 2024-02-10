@@ -46,7 +46,7 @@ async function EventList() {
                   day: "numeric",
                 })}
               </th>
-              <td className="px-6 py-4">{event.name}</td>
+              <td className="text-2xl font-extrabold">{event.name}</td>
             </tr>
           ))}
         </tbody>

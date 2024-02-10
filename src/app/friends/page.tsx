@@ -61,7 +61,9 @@ async function FriendList() {
                   </svg>
                 )}
               </th>
-              <td className="px-6 py-4">{friend.name}</td>
+              <td className="text-2xl font-extrabold">
+                {friend.name}
+              </td>
             </tr>
           ))}
         </tbody>
