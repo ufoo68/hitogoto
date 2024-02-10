@@ -158,8 +158,8 @@ export const tagsRelations = relations(tags, ({ one, many }) => ({
 
 export const friendTags = createTable("friend_tags", {
   id: varchar("id", { length: 128 }).primaryKey().$defaultFn(createId),
-  friendId: varchar("friend_id", { length: 255 }),
-  tagId: text("tag_id"),
+  friendId: varchar("friend_id", { length: 128 }),
+  tagId: varchar("tag_id", { length: 128 }),
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -178,7 +178,7 @@ export const friendProfiles = createTable("friend_profile", {
   id: varchar("id", { length: 128 }).primaryKey().$defaultFn(createId),
   label: varchar("label", { length: 256 }).notNull(),
   value: json("value").notNull(),
-  friendId: varchar("friend_id", { length: 255 }),
+  friendId: varchar("friend_id", { length: 128 }),
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -226,8 +226,8 @@ export const eventRelations = relations(events, ({ one, many }) => ({
 
 export const eventParticipants = createTable("event_participant", {
   id: varchar("id", { length: 128 }).primaryKey().$defaultFn(createId),
-  eventId: varchar("event_id", { length: 255 }),
-  friendId: varchar("friend_id", { length: 255 }),
+  eventId: varchar("event_id", { length: 128 }),
+  friendId: varchar("friend_id", { length: 128 }),
   createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -250,7 +250,7 @@ export const eventParticipantsRelations = relations(
 
 export const eventMedia = createTable("event_media", {
   id: varchar("id", { length: 128 }).primaryKey().$defaultFn(createId),
-  eventId: varchar("event_id", { length: 255 }),
+  eventId: varchar("event_id", { length: 128 }),
   content: json("content").notNull(),
   createdUserId: varchar("createdUserId", { length: 255 }),
   createdAt: timestamp("created_at")
