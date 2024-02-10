@@ -12,6 +12,13 @@ export function CreateEvent() {
   const [name, setName] = useState("");
   const [date, setDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
+  const [friends, setFriends] = useState<
+    {
+      id: string;
+      name: string;
+    }[]
+  >([]);
+  const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([]);
 
   const createEvent = api.event.create.useMutation({
     onSuccess: () => {
@@ -21,13 +28,17 @@ export function CreateEvent() {
       router.refresh();
     },
   });
+  api.friend.list.useQuery(undefined, {
+    onSuccess: (data) => {
+      setFriends(data);
+    },
+  });
 
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>新規作成</Button>
       <Modal show={isOpen} dismissible onClose={() => setIsOpen(false)}>
-        <Modal.Header />
-        <Modal.Body className="flex flex-col gap-2 items-center">
+        <Modal.Body className="flex flex-col items-center gap-2">
           <input
             type="text"
             placeholder="タイトル"
@@ -35,6 +46,25 @@ export function CreateEvent() {
             onChange={(e) => setName(e.target.value)}
             className="w-full rounded-full px-4 py-2 text-black"
           />
+          <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+            誰と？
+          </label>
+          <select
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            onChange={(e) => {
+              setSelectedFriendIds([e.target.value]);
+            }}
+          >
+            <option selected>友達を選択</option>
+            {friends.map((friend) => (
+              <option key={friend.id} value={friend.id}>
+                {friend.name}
+              </option>
+            ))}
+          </select>
+          <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+            いつ？
+          </label>
           <Datepicker
             inline
             onSelectedDateChanged={(d) => {
@@ -51,6 +81,7 @@ export function CreateEvent() {
               createEvent.mutate({
                 name,
                 date,
+                friendIds: selectedFriendIds,
               });
             }}
           >

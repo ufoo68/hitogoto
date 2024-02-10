@@ -34,7 +34,6 @@ export function CreateFriend() {
     <>
       <Button onClick={() => setIsOpen(true)}>新規作成</Button>
       <Modal show={isOpen} dismissible onClose={() => setIsOpen(false)}>
-        <Modal.Header />
         <Modal.Body className="flex flex-col gap-2">
           <FileInput onChange={handleFileChange} />
           <Avatar img={imageUrl} alt="avatar" rounded size="xl" />

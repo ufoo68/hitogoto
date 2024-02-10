@@ -7,7 +7,7 @@ import {
 import { friends } from "~/server/db/schema";
 
 export const friendRouter = createTRPCRouter({
-  lsit: protectedProcedure.query(({ ctx }) => {
+  list: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.friends.findMany({
       where: (friend, { eq }) => eq(friend.createdUserId, ctx.session.user.id),
     });

@@ -25,7 +25,7 @@ export default async function Friends() {
 }
 
 async function FriendList() {
-  const friends = await api.friend.lsit.query();
+  const friends = await api.friend.list.query();
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">

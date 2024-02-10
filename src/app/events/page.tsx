@@ -26,7 +26,7 @@ export default async function Home() {
 }
 
 async function EventList() {
-  const events = await api.event.lsit.query();
+  const events = await api.event.list.query();
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
