@@ -1,15 +1,15 @@
-import { unstable_noStore as noStore } from "next/cache";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+import { unstable_noStore as noStore } from 'next/cache'
+import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
-import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
-import { CreateFriend } from "~/app/friends/_components/create-friend";
+import { getServerAuthSession } from '~/server/auth'
+import { api } from '~/trpc/server'
+import { CreateFriend } from '~/app/friends/_components/create-friend'
 export default async function Friends() {
-  noStore();
-  const session = await getServerAuthSession();
+  noStore()
+  const session = await getServerAuthSession()
   if (!session) {
-    redirect("/api/auth/signin");
+    redirect('/api/auth/signin')
   }
 
   return (
@@ -32,11 +32,11 @@ export default async function Friends() {
         <FriendList />
       </div>
     </main>
-  );
+  )
 }
 
 async function FriendList() {
-  const friends = await api.friend.list.query();
+  const friends = await api.friend.list.query()
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
@@ -72,13 +72,11 @@ async function FriendList() {
                   </svg>
                 )}
               </th>
-              <td className="text-2xl font-extrabold">
-                {friend.name}
-              </td>
+              <td className="text-2xl font-extrabold">{friend.name}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-import { postRouter } from "~/server/api/routers/post";
-import { createTRPCRouter } from "~/server/api/trpc";
-import { friendRouter } from "./routers/friend";
-import { eventRouter } from "./routers/event";
+import { postRouter } from '~/server/api/routers/post'
+import { createTRPCRouter } from '~/server/api/trpc'
+import { friendRouter } from './routers/friend'
+import { eventRouter } from './routers/event'
 
 /**
  * This is the primary router for your server.
@@ -12,7 +12,7 @@ export const appRouter = createTRPCRouter({
   post: postRouter,
   friend: friendRouter,
   event: eventRouter,
-});
+})
 
 // export type definition of API
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter

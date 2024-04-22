@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod'
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { events, eventParticipants } from "~/server/db/schema";
+import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
+import { events, eventParticipants } from '~/server/db/schema'
 
 export const eventRouter = createTRPCRouter({
   list: protectedProcedure.query(({ ctx }) => {
@@ -14,7 +14,7 @@ export const eventRouter = createTRPCRouter({
           },
         },
       },
-    });
+    })
   }),
 
   create: protectedProcedure
@@ -33,15 +33,15 @@ export const eventRouter = createTRPCRouter({
           date: input.date,
           createdUserId: ctx.session.user.id,
         })
-        .returning();
-      const eventId = savedEvents[0]?.id;
+        .returning()
+      const eventId = savedEvents[0]?.id
       if (input.friendIds.length > 0 && eventId) {
         await ctx.db.insert(eventParticipants).values(
           input.friendIds.map((friendId) => ({
             eventId,
             friendId,
           })),
-        );
+        )
       }
     }),
-});
+})

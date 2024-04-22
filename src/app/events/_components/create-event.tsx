@@ -1,38 +1,38 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-import { Button, Modal, Datepicker } from "flowbite-react";
+import { Button, Modal, Datepicker } from 'flowbite-react'
 
-import { api } from "~/trpc/react";
+import { api } from '~/trpc/react'
 
 export function CreateEvent() {
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter()
+  const [name, setName] = useState('')
+  const [date, setDate] = useState(new Date())
+  const [isOpen, setIsOpen] = useState(false)
   const [friends, setFriends] = useState<
     {
-      id: string;
-      name: string;
+      id: string
+      name: string
     }[]
-  >([]);
-  const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([]);
+  >([])
+  const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([])
 
   const createEvent = api.event.create.useMutation({
     onSuccess: () => {
-      setName("");
-      setDate(new Date());
-      setIsOpen(false);
-      router.refresh();
+      setName('')
+      setDate(new Date())
+      setIsOpen(false)
+      router.refresh()
     },
-  });
+  })
   api.friend.list.useQuery(undefined, {
     onSuccess: (data) => {
-      setFriends(data);
+      setFriends(data)
     },
-  });
+  })
 
   return (
     <>
@@ -49,7 +49,7 @@ export function CreateEvent() {
           <select
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             onChange={(e) => {
-              setSelectedFriendIds([e.target.value]);
+              setSelectedFriendIds([e.target.value])
             }}
           >
             <option selected>友達を選択</option>
@@ -62,7 +62,7 @@ export function CreateEvent() {
           <Datepicker
             inline
             onSelectedDateChanged={(d) => {
-              setDate(d);
+              setDate(d)
             }}
             showClearButton={false}
           />
@@ -76,7 +76,7 @@ export function CreateEvent() {
                 name,
                 date,
                 friendIds: selectedFriendIds,
-              });
+              })
             }}
           >
             作成
@@ -84,5 +84,5 @@ export function CreateEvent() {
         </Modal.Body>
       </Modal>
     </>
-  );
+  )
 }
