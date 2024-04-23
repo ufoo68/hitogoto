@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.6",
+    "@formkit/tempo": "^0.1.1",
     "@paralleldrive/cuid2": "^2.2.2",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
@@ -21,6 +22,8 @@
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
     "@vercel/postgres": "^0.7.2",
+    "@yamada-ui/calendar": "^1.2.11",
+    "@yamada-ui/react": "^1.3.7",
     "drizzle-orm": "^0.29.3",
     "flowbite": "^2.2.1",
     "flowbite-react": "^0.7.2",
