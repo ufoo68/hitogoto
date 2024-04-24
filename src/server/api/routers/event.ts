@@ -4,18 +4,29 @@ import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
 import { events, eventParticipants } from '~/server/db/schema'
 
 export const eventRouter = createTRPCRouter({
-  list: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.events.findMany({
-      where: (friend, { eq }) => eq(friend.createdUserId, ctx.session.user.id),
-      with: {
-        participants: {
-          with: {
-            friend: true,
+  list: protectedProcedure
+    .input(
+      z.object({
+        startAt: z.date(),
+        endAt: z.date(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.query.events.findMany({
+        where: (friend, { eq, between, and }) =>
+          and(
+            eq(friend.createdUserId, ctx.session.user.id),
+            between(events.date, input.startAt, input.endAt),
+          ),
+        with: {
+          participants: {
+            with: {
+              friend: true,
+            },
           },
         },
-      },
-    })
-  }),
+      })
+    }),
 
   create: protectedProcedure
     .input(
