@@ -16,7 +16,7 @@ export const eventRouter = createTRPCRouter({
         where: (friend, { eq, between, and }) =>
           and(
             eq(friend.createdUserId, ctx.session.user.id),
-            between(events.createdAt, input.startAt, input.endAt),
+            between(events.date, input.startAt, input.endAt),
           ),
         with: {
           participants: {

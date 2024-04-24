@@ -3,13 +3,19 @@
 import { monthEnd, monthStart } from '@formkit/tempo'
 import { Calendar } from '@yamada-ui/calendar'
 import { Center, List, ListItem, VStack } from '@yamada-ui/react'
+import { useEffect, useState } from 'react'
 import { api } from '~/trpc/react'
 
 export function EventCalendar() {
+  const [month, setMonth] = useState<Date>(new Date())
   const events = api.event.list.useQuery({
-    startAt: monthStart(new Date()),
-    endAt: monthEnd(new Date()),
+    startAt: monthStart(month),
+    endAt: monthEnd(month),
   })
+  useEffect(() => {
+    console.log(month)
+    events.refetch()
+  }, [month])
   return (
     <Calendar
       dateFormat="YYYY年 MMMM"
@@ -24,6 +30,7 @@ export function EventCalendar() {
         th: { border: '1px solid', borderColor: 'border' },
         td: { border: '1px solid', borderColor: 'border' },
       }}
+      onChangeMonth={setMonth}
       dayProps={{
         h: 'auto',
         p: 2,
