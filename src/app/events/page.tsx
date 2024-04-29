@@ -1,17 +1,8 @@
-import { unstable_noStore as noStore } from 'next/cache'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import { CreateEvent } from '~/app/events/_components/create-event'
-import { getServerAuthSession } from '~/server/auth'
 import { EventCalendar } from './_components/event-calendar'
 
 export default async function Home() {
-  noStore()
-  const session = await getServerAuthSession()
-  if (!session) {
-    redirect('/api/auth/signin')
-  }
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">

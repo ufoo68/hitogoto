@@ -1,16 +1,7 @@
-import { unstable_noStore as noStore } from 'next/cache'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
-
-import { getServerAuthSession } from '~/server/auth'
 import { FriendList } from './_components/friend-list'
 import { CreateFriend } from '~/app/friends/_components/create-friend'
 export default async function Friends() {
-  noStore()
-  const session = await getServerAuthSession()
-  if (!session) {
-    redirect('/api/auth/signin')
-  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">

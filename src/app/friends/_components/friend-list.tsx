@@ -27,7 +27,7 @@ export function FriendList() {
       <CardBody className="grid gap-4 pt-4">
         <List>
           {frineds.data?.map((friend) => (
-            <ListItem className="flex items-center space-x-4 w-full">
+            <ListItem key={friend.id} className="flex items-center space-x-4 w-full">
               <Avatar
                 className="w-10 h-10"
                 src={friend.thmbnailUrl ?? ''}

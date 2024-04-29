@@ -13,7 +13,6 @@ export function EventCalendar() {
     endAt: monthEnd(month),
   })
   useEffect(() => {
-    console.log(month)
     events.refetch()
   }, [month])
   return (
