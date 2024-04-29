@@ -7,6 +7,7 @@ import {
 import { type Adapter } from 'next-auth/adapters'
 import DiscordProvider from 'next-auth/providers/discord'
 
+import CredentialsProvider from 'next-auth/providers/credentials'
 import { env } from '~/env'
 import { db } from '~/server/db'
 import { createTable } from '~/server/db/schema'
@@ -38,20 +39,46 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: 'jwt',
+  },
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: (params) => {
+      const { session, token, user } = params
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user ? user.id : token.id,
+        },
+      }
+    },
+    jwt: (params) => {
+      const { token, user } = params
+      if (user) {
+        token.id = user.id
+      }
+      return token
+    },
   },
   adapter: DrizzleAdapter(db, createTable) as Adapter,
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+    }),
+    CredentialsProvider({
+      name: 'quest',
+      credentials: {},
+      async authorize() {
+        return {
+          id: 'guest',
+          email: 'guest@example.com',
+          name: 'guest',
+          image: '',
+          provider: 'anonymous',
+        }
+      },
     }),
     /**
      * ...add more providers here.

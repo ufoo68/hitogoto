@@ -5,13 +5,7 @@ import { getServerAuthSession } from '~/server/auth'
 import Link from 'next/link'
 import { SignOutButton } from '~/app/_component/sign-out-button'
 
-export default async function Home() {
-  noStore()
-  const session = await getServerAuthSession()
-  if (!session) {
-    redirect('/api/auth/signin')
-  }
-
+export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <div className="flex flex-col gap-3">
