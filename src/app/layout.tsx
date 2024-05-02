@@ -7,6 +7,7 @@ import { UIProvider } from '@yamada-ui/react'
 import { TRPCReactProvider } from '~/trpc/react'
 import { redirect } from 'next/navigation'
 import { getServerAuthSession } from '~/server/auth'
+import { MainHeader } from './_component/main-header'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,6 +33,7 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body className={`font-sans ${inter.variable}`}>
+        <MainHeader />
         <UIProvider>
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </UIProvider>

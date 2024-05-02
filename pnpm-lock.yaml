@@ -74,6 +74,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-icons:
+        specifier: ^5.2.0
+        version: 5.2.0(react@18.2.0)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -2869,6 +2872,11 @@ packages:
 
   react-icons@5.0.1:
     resolution: {integrity: sha512-WqLZJ4bLzlhmsvme6iFdgO8gfZP17rfjYEJ2m9RsZjZ+cc4k1hTzknEz63YS1MeT50kVzoa1Nz36f4BEx+Wigw==}
+    peerDependencies:
+      react: '*'
+
+  react-icons@5.2.0:
+    resolution: {integrity: sha512-n52Y7Eb4MgQZHsSZOhSXv1zs2668/hBYKfSRIvKh42yExjyhZu0d1IK2CLLZ3BZB1oo13lDfwx2vOh2z9FTV6Q==}
     peerDependencies:
       react: '*'
 
@@ -6943,6 +6951,10 @@ snapshots:
       '@types/react': 18.2.79
 
   react-icons@5.0.1(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+
+  react-icons@5.2.0(react@18.2.0):
     dependencies:
       react: 18.2.0
 
