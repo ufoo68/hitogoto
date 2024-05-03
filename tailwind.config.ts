@@ -10,7 +10,5 @@ export default {
       },
     },
   },
-  plugins: [
-    require("flowbite/plugin"),
-  ],
+  plugins: [],
 } satisfies Config;
