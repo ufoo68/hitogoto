@@ -40,9 +40,6 @@ export function MainHeader() {
           </BreadcrumbItem>
         ))}
       </Breadcrumb>
-      <Link className="flex items-center text-white" href="/">
-        <span className="text-lg font-semibold">ヒトゴト</span>
-      </Link>
       <FiLogOut className="cursor-pointer" size={30} onClick={() => signOut()} />
     </header>
   )
