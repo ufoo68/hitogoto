@@ -4,7 +4,6 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  Link,
 } from '@yamada-ui/react'
 import { signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'

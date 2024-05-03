@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Input,
 } from '@yamada-ui/react'
 import { useS3Upload } from 'next-s3-upload'
 
@@ -59,12 +60,11 @@ export function CreateFriend() {
               size="xl"
             />
           </div>
-          <input
+          <Input
             type="text"
             placeholder="名前"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-full px-4 py-2 text-black"
           />
         </ModalBody>
         <ModalFooter>
