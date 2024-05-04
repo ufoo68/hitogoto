@@ -3,12 +3,12 @@
 import { monthEnd, monthStart } from '@formkit/tempo'
 import { Calendar } from '@yamada-ui/calendar'
 import { Center, Indicator } from '@yamada-ui/react'
+import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { api } from '~/trpc/react'
 import { EventListModal } from './event-list-modal'
-import dayjs from 'dayjs'
 
 export const EventCalendar = dynamic(
   () =>
@@ -27,9 +27,6 @@ export function EventCalendarDynamic() {
     startAt: monthStart(month),
     endAt: monthEnd(month),
   })
-  useEffect(() => {
-    events.refetch()
-  }, [month])
   return (
     <Calendar
       suppressHydrationWarning
@@ -47,7 +44,6 @@ export function EventCalendarDynamic() {
       onChangeMonth={setMonth}
       dayProps={{
         h: 'auto',
-        p: 2,
         _selected: {},
         _hover: {},
         _active: {},
@@ -79,11 +75,14 @@ export function EventCalendarDynamic() {
             }
           })
           return (
-            <div onClick={() => {
-              if (eventOnDay.length > 0) {
-                setSelectedDate(date)
-              }
-            }}>
+            <div
+              className="p-2"
+              onClick={() => {
+                if (eventOnDay.length > 0) {
+                  setSelectedDate(date)
+                }
+              }}
+            >
               <Indicator
                 size="sm"
                 showZero={false}
@@ -105,7 +104,10 @@ export function EventCalendarDynamic() {
                 </Center>
               </Indicator>
               <EventListModal
-                isOpen={Boolean(selectedDate) && dayjs(selectedDate).isSame(date, 'date')}
+                isOpen={
+                  Boolean(selectedDate) &&
+                  dayjs(selectedDate).isSame(date, 'date')
+                }
                 onClose={() => setSelectedDate(null)}
                 events={eventOnDay}
               />

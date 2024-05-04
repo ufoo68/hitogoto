@@ -34,10 +34,7 @@ export function MainHeader() {
             key={path}
             isCurrentPage={i === pathSegments.length - 1}
           >
-            <BreadcrumbLink
-              className="text-gray-400 hover:text-white"
-              href={pathMap[path]}
-            >
+            <BreadcrumbLink className="w-14 truncate" href={pathMap[path]}>
               {path}
             </BreadcrumbLink>
           </BreadcrumbItem>
