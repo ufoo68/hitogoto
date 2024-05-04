@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { api } from '~/trpc/react'
 import { EventListModal } from './event-list-modal'
+import dayjs from 'dayjs'
 
 export const EventCalendar = dynamic(
   () =>
@@ -21,6 +22,7 @@ export const EventCalendar = dynamic(
 
 export function EventCalendarDynamic() {
   const [month, setMonth] = useState<Date>(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date | null>()
   const events = api.event.list.useQuery({
     startAt: monthStart(month),
     endAt: monthEnd(month),
@@ -54,7 +56,6 @@ export function EventCalendarDynamic() {
         },
         transitionProperty: 'none',
         component: ({ date, isSelected }) => {
-          const [showList, setShowList] = useState(false)
           const eventOnDay = (
             events.data?.filter(
               (event) =>
@@ -80,7 +81,7 @@ export function EventCalendarDynamic() {
           return (
             <div onClick={() => {
               if (eventOnDay.length > 0) {
-                setShowList(true)
+                setSelectedDate(date)
               }
             }}>
               <Indicator
@@ -104,8 +105,8 @@ export function EventCalendarDynamic() {
                 </Center>
               </Indicator>
               <EventListModal
-                isOpen={showList}
-                onClose={() => setShowList(false)}
+                isOpen={dayjs(selectedDate).isSame(date, 'date')}
+                onClose={() => setSelectedDate(null)}
                 events={eventOnDay}
               />
             </div>
