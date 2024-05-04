@@ -22,7 +22,7 @@ export function MainHeader() {
     .split('/')
     .filter((segment) => segment !== '') as Path[]
   return (
-    <header className="flex h-16 items-center justify-between px-4 md:px-6 w-full bg-gray-900 text-white">
+    <header className="sticky top-0 flex h-16 items-center justify-between px-4 md:px-6 w-full bg-gray-900 text-white">
       <Breadcrumb separator={<FaAngleRight />}>
         <BreadcrumbItem isCurrentPage={pathSegments.length === 0}>
           <BreadcrumbLink className="text-gray-400 hover:text-white" href="/">
