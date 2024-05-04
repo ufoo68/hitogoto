@@ -105,7 +105,7 @@ export function EventCalendarDynamic() {
                 </Center>
               </Indicator>
               <EventListModal
-                isOpen={dayjs(selectedDate).isSame(date, 'date')}
+                isOpen={Boolean(selectedDate) && dayjs(selectedDate).isSame(date, 'date')}
                 onClose={() => setSelectedDate(null)}
                 events={eventOnDay}
               />
