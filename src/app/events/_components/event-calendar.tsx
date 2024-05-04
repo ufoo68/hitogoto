@@ -45,7 +45,7 @@ export function EventCalendarDynamic() {
       onChangeMonth={setMonth}
       dayProps={{
         h: 'auto',
-        p: 3,
+        p: 2,
         _selected: {},
         _hover: {},
         _active: {},
@@ -54,6 +54,7 @@ export function EventCalendarDynamic() {
         },
         transitionProperty: 'none',
         component: ({ date, isSelected }) => {
+          const [showList, setShowList] = useState(false)
           const eventOnDay = (
             events.data?.filter(
               (event) =>
@@ -77,7 +78,11 @@ export function EventCalendarDynamic() {
             }
           })
           return (
-            <div>
+            <div onClick={() => {
+              if (eventOnDay.length > 0) {
+                setShowList(true)
+              }
+            }}>
               <Indicator
                 size="sm"
                 showZero={false}
@@ -99,7 +104,8 @@ export function EventCalendarDynamic() {
                 </Center>
               </Indicator>
               <EventListModal
-                isSelected={isSelected && eventOnDay.length > 0}
+                isOpen={showList}
+                onClose={() => setShowList(false)}
                 events={eventOnDay}
               />
             </div>

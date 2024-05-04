@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { FriendList } from './_components/friend-list'
 import { CreateFriend } from '~/app/friends/_components/create-friend'
 export default async function Friends() {

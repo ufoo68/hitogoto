@@ -1,8 +1,15 @@
-import { List, ListItem, Modal, ModalBody } from '@yamada-ui/react'
-import { useEffect, useState } from 'react'
+import {
+  Avatar,
+  AvatarGroup,
+  Modal,
+  ModalBody,
+  ModalHeader,
+} from '@yamada-ui/react'
+import dayjs from 'dayjs'
 
 type Props = {
-  isSelected: boolean
+  isOpen: boolean
+  onClose: () => void
   events: {
     id: string
     name: string
@@ -16,34 +23,30 @@ type Props = {
   }[]
 }
 
-export function EventListModal({
-  isSelected,
-  events
-}: Props) {
-  const [isOpen, setIsOpen] = useState(isSelected)
-  useEffect(() => {
-    setIsOpen(isSelected)
-  }, [isSelected])
+export function EventListModal({ isOpen, onClose, events }: Props) {
+  const eventDate = events[0]?.date
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalHeader>
+        {dayjs(eventDate).format('YYYY年MM月DD日')}のできごと
+      </ModalHeader>
       <ModalBody>
-        <List w="full" gap="sm">
+        <div className="flex flex-col gap-1 overflow-hidden">
           {events.map((event) => (
-            <ListItem key={event.id}>
-              <div>{event.name}</div>
-              <div>{event.date.toLocaleDateString()}</div>
-              <div>{event.description}</div>
-              <List w="full" gap="sm">
+            <div key={event.id} className="flex gap-1 items-center">
+              <AvatarGroup max={3}>
                 {event.participants.map((participant) => (
-                  <ListItem key={participant.id}>
-                    <div>{participant.name}</div>
-                    <div>{participant.thmbnailUrl}</div>
-                  </ListItem>
+                  <Avatar
+                    key={participant.id}
+                    name={participant.name}
+                    src={participant.thmbnailUrl}
+                  />
                 ))}
-              </List>
-            </ListItem>
+              </AvatarGroup>
+              <div className="text-xl truncate max-w-52">{event.name}</div>
+            </div>
           ))}
-        </List>
+        </div>
       </ModalBody>
     </Modal>
   )
