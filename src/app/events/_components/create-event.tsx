@@ -37,7 +37,7 @@ export function CreateEvent() {
       router.refresh()
     },
   })
-  api.friend.list.useQuery(undefined, {
+  api.friend.list.useQuery({}, {
     onSuccess: (data) => {
       setFriends(data)
     },
@@ -45,7 +45,9 @@ export function CreateEvent() {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>新規作成</Button>
+      <Button colorScheme="primary" onClick={() => setIsOpen(true)}>
+        新規作成
+      </Button>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader>できごと</ModalHeader>
         <ModalBody className="h-100">
