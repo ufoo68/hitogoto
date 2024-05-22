@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from '@yamada-ui/react'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@yamada-ui/react'
 import { signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import { FaAngleRight, FaHome } from 'react-icons/fa'

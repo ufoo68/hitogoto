@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaUserFriends, FaCalendar } from 'react-icons/fa'
+import { FaCalendar, FaUserFriends } from 'react-icons/fa'
 
 export default function Home() {
   return (

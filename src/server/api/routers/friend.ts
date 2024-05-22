@@ -58,4 +58,13 @@ export const friendRouter = createTRPCRouter({
         })
         .where(eq(friends.id, input.id))
     }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.delete(friends).where(eq(friends.id, input.id))
+    }),
 })

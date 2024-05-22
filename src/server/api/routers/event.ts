@@ -1,3 +1,5 @@
+import { get } from 'http'
+import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
@@ -54,5 +56,57 @@ export const eventRouter = createTRPCRouter({
           })),
         )
       }
+    }),
+  get: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.events.findFirst({
+        where: (event, { eq }) => eq(event.id, input.id),
+        with: {
+          participants: {
+            with: {
+              friend: true,
+            },
+          },
+        },
+      })
+    }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().optional(),
+        date: z.date().optional(),
+        friendIds: z.array(z.string()).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .update(events)
+        .set({
+          name: input.name,
+          date: input.date,
+        })
+        .where(eq(events.id, input.id))
+      if (input.friendIds) {
+        await ctx.db
+          .delete(eventParticipants)
+          .where(eq(eventParticipants.eventId, input.id))
+        await ctx.db.insert(eventParticipants).values(
+          input.friendIds.map((friendId) => ({
+            eventId: input.id,
+            friendId,
+          })),
+        )
+      }
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.delete(events).where(eq(events.id, input.id))
     }),
 })

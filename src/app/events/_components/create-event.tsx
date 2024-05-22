@@ -37,11 +37,14 @@ export function CreateEvent() {
       router.refresh()
     },
   })
-  api.friend.list.useQuery({}, {
-    onSuccess: (data) => {
-      setFriends(data)
+  api.friend.list.useQuery(
+    {},
+    {
+      onSuccess: (data) => {
+        setFriends(data)
+      },
     },
-  })
+  )
 
   return (
     <>

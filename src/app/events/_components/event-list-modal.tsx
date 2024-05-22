@@ -6,6 +6,7 @@ import {
   ModalHeader,
 } from '@yamada-ui/react'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   isOpen: boolean
@@ -25,6 +26,7 @@ type Props = {
 
 export function EventListModal({ isOpen, onClose, events }: Props) {
   const eventDate = events[0]?.date
+  const router = useRouter()
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader>
@@ -33,7 +35,11 @@ export function EventListModal({ isOpen, onClose, events }: Props) {
       <ModalBody>
         <div className="flex flex-col gap-1 overflow-hidden">
           {events.map((event) => (
-            <div key={event.id} className="flex gap-1 items-center">
+            <div
+              key={event.id}
+              className="flex gap-1 items-center cursor-pointer"
+              onClick={() => router.push(`/events/${event.id}`)}
+            >
               <AvatarGroup max={3}>
                 {event.participants.map((participant) => (
                   <Avatar

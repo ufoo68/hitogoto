@@ -1,3 +1,4 @@
+import { createId } from '@paralleldrive/cuid2'
 import { relations, sql } from 'drizzle-orm'
 import {
   index,
@@ -11,7 +12,6 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 import { type AdapterAccount } from 'next-auth/adapters'
-import { createId } from '@paralleldrive/cuid2'
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
