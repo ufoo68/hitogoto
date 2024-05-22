@@ -1,7 +1,7 @@
 import { postRouter } from '~/server/api/routers/post'
 import { createTRPCRouter } from '~/server/api/trpc'
-import { friendRouter } from './routers/friend'
 import { eventRouter } from './routers/event'
+import { friendRouter } from './routers/friend'
 
 /**
  * This is the primary router for your server.

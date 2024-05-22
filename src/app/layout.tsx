@@ -1,12 +1,12 @@
-import '~/styles/globals.css'
 import { unstable_noStore as noStore } from 'next/cache'
+import '~/styles/globals.css'
 
 import { Inter } from 'next/font/google'
 
 import { UIProvider } from '@yamada-ui/react'
-import { TRPCReactProvider } from '~/trpc/react'
 import { redirect } from 'next/navigation'
 import { getServerAuthSession } from '~/server/auth'
+import { TRPCReactProvider } from '~/trpc/react'
 import { MainHeader } from './_component/main-header'
 
 const inter = Inter({

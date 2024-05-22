@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation'
-import { ProfileCard } from './_components/profile-card'
+import { EventFormCard } from './_components/event-form-card'
 
-export default async function Friend({ params }: { params: { id: string } }) {
+export default async function Event({ params }: { params: { id: string } }) {
   const { id } = params
   if (typeof id !== 'string') {
-    redirect('/friends')
+    redirect('/events')
   }
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <ProfileCard friendId={id} />
+      <EventFormCard eventId={id} />
     </main>
   )
 }

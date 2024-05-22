@@ -6,12 +6,12 @@ import { useState } from 'react'
 import {
   Avatar,
   Button,
+  Input,
   Loading,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Input,
 } from '@yamada-ui/react'
 import { useS3Upload } from 'next-s3-upload'
 

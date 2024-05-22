@@ -11,6 +11,7 @@ import {
   Loading,
 } from '@yamada-ui/react'
 import { useS3Upload } from 'next-s3-upload'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { api } from '~/trpc/react'
 type Props = {
@@ -19,8 +20,10 @@ type Props = {
 
 export function ProfileCard(props: Props) {
   const { friendId } = props
+  const router = useRouter()
   const friend = api.friend.get.useQuery({ id: friendId })
   const updateFriend = api.friend.update.useMutation()
+  const deleteFriend = api.friend.delete.useMutation()
   const [profile, setProfile] = useState({
     name: friend.data?.name ?? '',
     thmbnailUrl: friend.data?.thmbnailUrl ?? '',
@@ -60,6 +63,7 @@ export function ProfileCard(props: Props) {
                 },
               },
             )
+            router.push('/friends')
           }}
         >
           <div className="w-full flex justify-center">
@@ -82,9 +86,22 @@ export function ProfileCard(props: Props) {
               onChange={(e) => setProfile({ ...profile, name: e.target.value })}
             />
           </div>
-          <Button className="w-full" type="submit">
-            更新
-          </Button>
+          <div className="flex justify-between">
+            <Button type="submit" color="blue">
+              更新
+            </Button>
+            <Button
+              color="red"
+              onClick={() => {
+                deleteFriend.mutate({
+                  id: friendId,
+                })
+                router.push('/friends')
+              }}
+            >
+              削除
+            </Button>
+          </div>
         </form>
       </CardBody>
     </Card>
