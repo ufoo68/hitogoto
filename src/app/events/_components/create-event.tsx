@@ -16,7 +16,11 @@ import {
 
 import { api } from '~/trpc/react'
 
-export function CreateEvent() {
+type Props = {
+  onCreated: () => void;
+}
+
+export function CreateEvent({ onCreated }: Props) {
   const router = useRouter()
   const [name, setName] = useState('')
   const [date, setDate] = useState(new Date())
@@ -86,6 +90,10 @@ export function CreateEvent() {
                 name,
                 date,
                 friendIds: selectedFriendIds,
+              }, {
+                onSuccess() {
+                  onCreated()
+                }
               })
             }}
           >

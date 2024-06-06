@@ -1,14 +1,13 @@
 'use client'
 
-import { monthEnd, monthStart } from '@formkit/tempo'
 import { Calendar } from '@yamada-ui/calendar'
 import { Center, Indicator } from '@yamada-ui/react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
-import { api } from '~/trpc/react'
+import { useState } from 'react'
 import { EventListModal } from './event-list-modal'
+import { Event } from '../_util/types'
 
 export const EventCalendar = dynamic(
   () =>
@@ -20,13 +19,16 @@ export const EventCalendar = dynamic(
   },
 )
 
-export function EventCalendarDynamic() {
-  const [month, setMonth] = useState<Date>(new Date())
+type Props = {
+  events: Event[]
+  onChangeMonth: (date: Date) => void
+  onDeleted: () => void
+}
+
+export function EventCalendarDynamic({ events, onChangeMonth, onDeleted }: Props) {
+  
   const [selectedDate, setSelectedDate] = useState<Date | null>()
-  const events = api.event.list.useQuery({
-    startAt: monthStart(month),
-    endAt: monthEnd(month),
-  })
+  
   return (
     <Calendar
       suppressHydrationWarning
@@ -41,7 +43,7 @@ export function EventCalendarDynamic() {
         th: { border: '1px solid', borderColor: 'border' },
         td: { border: '1px solid', borderColor: 'border' },
       }}
-      onChangeMonth={setMonth}
+      onChangeMonth={onChangeMonth}
       dayProps={{
         h: 'auto',
         _selected: {},
@@ -53,27 +55,13 @@ export function EventCalendarDynamic() {
         transitionProperty: 'none',
         component: ({ date, isSelected }) => {
           const eventOnDay = (
-            events.data?.filter(
+            events.filter(
               (event) =>
                 date.getFullYear() === event.date.getFullYear() &&
                 date.getMonth() === event.date.getMonth() &&
                 date.getDate() === event.date.getDate(),
             ) ?? []
-          ).map((event) => {
-            return {
-              id: event.id,
-              name: event.name,
-              description: event.description ?? '',
-              date: event.date,
-              participants: event.participants.map((participant) => {
-                return {
-                  id: participant.id,
-                  name: participant.friend?.name ?? '',
-                  thmbnailUrl: participant.friend?.thmbnailUrl ?? '',
-                }
-              }),
-            }
-          })
+          )
           return (
             <div
               className="p-2"
@@ -110,6 +98,10 @@ export function EventCalendarDynamic() {
                 }
                 onClose={() => setSelectedDate(null)}
                 events={eventOnDay}
+                onDeleted={() => {
+                  onDeleted()
+                  setSelectedDate(null)
+                }}
               />
             </div>
           )

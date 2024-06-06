@@ -17,7 +17,11 @@ import { useS3Upload } from 'next-s3-upload'
 
 import { api } from '~/trpc/react'
 
-export function CreateFriend() {
+type Props = {
+  onCreated: () => void
+}
+
+export function CreateFriend({ onCreated }: Props) {
   const router = useRouter()
   const [name, setName] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -73,10 +77,17 @@ export function CreateFriend() {
             color="blue"
             disabled={createFriend.isLoading}
             onClick={() => {
-              createFriend.mutate({
-                name,
-                thmbnailUrl: imageUrl,
-              })
+              createFriend.mutate(
+                {
+                  name,
+                  thmbnailUrl: imageUrl,
+                },
+                {
+                  onSuccess() {
+                    onCreated()
+                  },
+                },
+              )
             }}
           >
             作成
