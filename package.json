@@ -10,7 +10,8 @@
     "dev": "next dev",
     "lint": "biome lint ./src",
     "check": "biome check --apply ./src",
-    "start": "next start"
+    "start": "next start",
+    "docker:start": "docker compose up -d"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.6",

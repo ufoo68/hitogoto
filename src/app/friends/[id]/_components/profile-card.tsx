@@ -10,7 +10,7 @@ import {
   Label,
   Loading,
 } from '@yamada-ui/react'
-import { useS3Upload } from 'next-s3-upload'
+import { usePresignedUpload } from 'next-s3-upload'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { api } from '~/trpc/react'
@@ -28,7 +28,7 @@ export function ProfileCard(props: Props) {
     name: friend.data?.name ?? '',
     thmbnailUrl: friend.data?.thmbnailUrl ?? '',
   })
-  const { FileInput, openFileDialog, uploadToS3 } = useS3Upload()
+  const { uploadToS3 } = usePresignedUpload()
   const [isUploading, setIsUploading] = useState(false)
   useEffect(() => {
     setProfile({
@@ -66,15 +66,22 @@ export function ProfileCard(props: Props) {
             router.push('/friends')
           }}
         >
-          <div className="w-full flex justify-center">
-            <FileInput onChange={handleFileChange} />
+          <div className="w-full flex justify-center flex-col items-center">
             <Avatar
               icon={isUploading ? <Loading /> : undefined}
               className="cursor-pointer"
-              onClick={openFileDialog}
               src={isUploading ? undefined : profile.thmbnailUrl}
               alt="avatar"
-              size="md"
+              size="xl"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  handleFileChange(e.target.files[0])
+                }
+              }}
             />
           </div>
           <div className="space-y-2">

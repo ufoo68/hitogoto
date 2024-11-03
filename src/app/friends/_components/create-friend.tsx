@@ -13,7 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@yamada-ui/react'
-import { useS3Upload } from 'next-s3-upload'
+import { usePresignedUpload } from 'next-s3-upload'
 
 import { api } from '~/trpc/react'
 
@@ -26,7 +26,7 @@ export function CreateFriend({ onCreated }: Props) {
   const [name, setName] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
-  const { FileInput, openFileDialog, uploadToS3 } = useS3Upload()
+  const { uploadToS3 } = usePresignedUpload()
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFileChange = async (file: File) => {
@@ -53,15 +53,22 @@ export function CreateFriend({ onCreated }: Props) {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalHeader>プロフィール</ModalHeader>
         <ModalBody>
-          <div className="flex justify-center w-full">
-            <FileInput onChange={handleFileChange} />
+          <div className="flex justify-center w-full flex-col items-center">
             <Avatar
               icon={isUploading ? <Loading /> : undefined}
               className="cursor-pointer"
-              onClick={openFileDialog}
               src={imageUrl}
               alt="avatar"
               size="xl"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  handleFileChange(e.target.files[0])
+                }
+              }}
             />
           </div>
           <Input
