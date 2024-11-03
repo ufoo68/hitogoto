@@ -78,7 +78,7 @@ export function ProfileCard(props: Props) {
               type="file"
               accept="image/*"
               onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
+                if (e.target.files?.[0]) {
                   handleFileChange(e.target.files[0])
                 }
               }}

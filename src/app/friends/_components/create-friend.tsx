@@ -1,5 +1,3 @@
-'use client'
-
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -65,7 +63,7 @@ export function CreateFriend({ onCreated }: Props) {
               type="file"
               accept="image/*"
               onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
+                if (e.target.files?.[0]) {
                   handleFileChange(e.target.files[0])
                 }
               }}
@@ -95,8 +93,7 @@ export function CreateFriend({ onCreated }: Props) {
                   },
                 },
               )
-            }}
-          >
+            }}          >
             作成
           </Button>
         </ModalFooter>
