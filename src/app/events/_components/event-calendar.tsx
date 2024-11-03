@@ -1,5 +1,3 @@
-'use client'
-
 import { Calendar } from '@yamada-ui/calendar'
 import { Center, Indicator } from '@yamada-ui/react'
 import dayjs from 'dayjs'
@@ -45,7 +43,7 @@ export function EventCalendarDynamic({ events, onChangeMonth, onDeleted }: Props
       }}
       onChangeMonth={onChangeMonth}
       dayProps={{
-        h: 'auto',
+        h: '10',
         _selected: {},
         _hover: {},
         _active: {},
@@ -53,7 +51,7 @@ export function EventCalendarDynamic({ events, onChangeMonth, onDeleted }: Props
           display: 'none',
         },
         transitionProperty: 'none',
-        component: ({ date, isSelected }) => {
+        component: ({ date }) => {
           const eventOnDay = (
             events.filter(
               (event) =>
@@ -79,17 +77,11 @@ export function EventCalendarDynamic({ events, onChangeMonth, onDeleted }: Props
                 pingScale={1.4}
                 withBorder
               >
-                <Center
-                  bg={isSelected ? 'secondary' : undefined}
-                  w={8}
-                  lineHeight={8}
-                  rounded="full"
-                  color={isSelected ? 'white' : undefined}
-                  transitionProperty="background"
-                  transitionDuration="normal"
+                <div
+                  className="rounded-full w-8 h-8 flex items-center justify-center"
                 >
                   {date.getDate()}
-                </Center>
+                </div>
               </Indicator>
               <EventListModal
                 isOpen={

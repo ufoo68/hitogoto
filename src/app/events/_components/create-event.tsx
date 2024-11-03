@@ -1,9 +1,8 @@
-'use client'
-
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import {
+  Avatar,
   Button,
   Input,
   Modal,
@@ -12,12 +11,13 @@ import {
   ModalHeader,
   MultiSelect,
   Option,
+  Tag,
 } from '@yamada-ui/react'
 
 import { api } from '~/trpc/react'
 
 type Props = {
-  onCreated: () => void;
+  onCreated: () => void
 }
 
 export function CreateEvent({ onCreated }: Props) {
@@ -29,6 +29,7 @@ export function CreateEvent({ onCreated }: Props) {
     {
       id: string
       name: string
+      thmbnailUrl: string | null
     }[]
   >([])
   const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([])
@@ -55,7 +56,11 @@ export function CreateEvent({ onCreated }: Props) {
       <Button colorScheme="primary" onClick={() => setIsOpen(true)}>
         新規作成
       </Button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal
+        className="overflow-y-auto"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
         <ModalHeader>できごと</ModalHeader>
         <ModalBody className="h-100">
           <Input
@@ -70,6 +75,20 @@ export function CreateEvent({ onCreated }: Props) {
             value={selectedFriendIds}
             onChange={(v) => {
               setSelectedFriendIds(v)
+            }}
+            component={({ value, label, onRemove }) => {
+              const friend = friends.find((f) => f.id === value)
+              return (
+                <Tag
+                  onClose={onRemove}
+                  variant="outline"
+                  leftIcon={
+                    <Avatar size="xs" src={friend?.thmbnailUrl ?? ''} />
+                  }
+                >
+                  {label}
+                </Tag>
+              )
             }}
           >
             {friends.map((friend) => (
@@ -86,15 +105,18 @@ export function CreateEvent({ onCreated }: Props) {
             color="blue"
             disabled={createEvent.isLoading}
             onClick={() => {
-              createEvent.mutate({
-                name,
-                date,
-                friendIds: selectedFriendIds,
-              }, {
-                onSuccess() {
-                  onCreated()
-                }
-              })
+              createEvent.mutate(
+                {
+                  name,
+                  date,
+                  friendIds: selectedFriendIds,
+                },
+                {
+                  onSuccess() {
+                    onCreated()
+                  },
+                },
+              )
             }}
           >
             作成
